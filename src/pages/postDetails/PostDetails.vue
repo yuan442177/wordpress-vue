@@ -14,7 +14,7 @@
 
 <script>
 // import Bscroll from 'better-scroll'
-import HomeHeader from './../home/components/Header'
+import HomeHeader from './components/Header'
 export default {
   name: 'PostDetails',
   data () {
@@ -46,7 +46,7 @@ export default {
   .wrapper{
     /* overflow: hidden; */
     position: absolute;
-    top: 0.86rem;
+    top: 1.2rem;
     left: 0;
     right: 0;
     bottom: 0;

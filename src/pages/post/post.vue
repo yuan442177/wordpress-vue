@@ -4,17 +4,20 @@
      <!-- <keep-alive> -->
       <post-content></post-content>
      <!-- </keep-alive> -->
+     <home-footer></home-footer>
   </div>
 </template>
 
 <script>
 import HomeHeader from './components/Header'
 import PostContent from './components/Content'
+import HomeFooter from '@/pages/common/Footer'
 export default {
   name: 'Post',
   components: {
     HomeHeader,
-    PostContent
+    PostContent,
+    HomeFooter
   }
 }
 </script>

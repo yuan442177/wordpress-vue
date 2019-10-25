@@ -1,8 +1,9 @@
 <template>
   <div class="content">
-    <div class="wrapper" ref="wrapper">
+    <div class="wrapper" ref="wrapper" v-show="showWrapper">
       <van-pull-refresh
         v-model="isLoading"
+        loading-text="刷新中..."
         success-text="刷新成功"
         @refresh="onRefresh"
         offset="50"
@@ -71,17 +72,25 @@
         /> -->
       <!-- </ul> -->
     </van-pull-refresh>
+    <div class="footer_zhanwei"></div>
+    <van-loading v-show="InitLoading" class="InitLoading" size="24px" vertical>加载中...</van-loading>
+  </div>
+  <div class="error_zhanwei" v-show="!showWrapper">
+    网络异常
   </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import error from '@/common/error.js'
 export default {
   name: 'PostContent',
   data () {
     return {
+      showWrapper: true,
       isLoading: false,
+      InitLoading: true,
       loading: false,
       postList: [],
       finished: false,
@@ -91,13 +100,28 @@ export default {
   },
   methods: {
     getPostInfo (page) {
-      axios.get('static/post' + page + '.json')
-      // axios.get('https://www.gameloveman.com/wp-json/wp/v2/posts?page=' + page + '')
+      // axios.get('static/post' + page + '.json')
+      axios.get('https://www.gameloveman.com/wp-json/wp/v2/posts?page=' + page + '')
         .then(this.getPostInfoSucc)
         .catch((err) => {
+          const {errCode, errMsg} = error.getErrMsg(err)
+          console.log(errCode, errMsg)
+          if (errCode === 404) {
+            this.$toast.fail('已经全部加载完了')
+            if (!this.postList.length) {
+              this.showWrapper = false
+            }
+          } else {
+            this.$toast.fail(errMsg)
+            if (!this.postList.length) {
+              this.showWrapper = false
+            }
+          }
           this.loading = false
-          this.finished = true
-          console.log(err)
+          // this.finished = true
+          this.InitLoading = false
+          this.isLoading = false
+          // console.log(err)
         })
     },
     getPostInfoSucc (res) {
@@ -114,15 +138,18 @@ export default {
     },
     // 下拉刷新 数据初始化
     onRefresh () {
-      this.postList = []
-      this.$store.commit('commitRefresh', 1)
-      this.getPostInfo(1)
+      setTimeout(() => {
+        this.postList = []
+        this.$store.commit('commitRefresh', 1)
+        this.getPostInfo(1)
+      }, 1000)
     },
     handlePostListClick (item) {
       this.$store.commit('changePostDetails', item)
     },
     // 上拉加载
     onLoad () {
+      this.InitLoading = false
       setTimeout(() => {
         console.log('加载')
         this.$store.commit('handlePageNext', 1)
@@ -132,6 +159,8 @@ export default {
     }
   },
   mounted () {
+    error.getErrMsg(200)
+    // setTimeout(() => {
     if (localStorage.postList) {
       if (JSON.parse(localStorage.postList).length) {
         this.postList = []
@@ -144,14 +173,27 @@ export default {
       console.log(this.$store.state.PageSize)
       this.getPostInfo(this.$store.state.PageSize)
     }
+    // }, 1000)
   }
 }
 </script>
 
 <style scoped>
-  .wrapper{
+  .error_zhanwei{
     position: absolute;
     top: 0.86rem;
+    left: 0;
+    right: 0;
+    bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #5F524A;
+    font-size: .6rem;
+  }
+  .wrapper{
+    position: absolute;
+    top: 1.2rem;
     left: 0;
     right: 0;
     bottom: 0;
@@ -162,6 +204,7 @@ export default {
   }
   .item {
     padding: .2rem .1rem;
+    border-bottom: 1px solid #5F524A;
   }
   .item-img-wrapper{
     overflow: hidden;
@@ -194,23 +237,13 @@ export default {
     color: #ffffff;
     margin: 0 auto;
   }
-  /* .content{
-    position: relative;
-  } */
-  .loading{
-    /* text-align: center;
-    width: 50%;
-    height: 2rem;
-    line-height: 2rem;
-    border-radius: .5rem;
-    overflow: auto;
-    margin: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.6); */
-    color: #5F524A;
+  .InitLoading{
+    margin-top: 60%;
   }
+  .footer_zhanwei{
+    height: 1rem;
+  }
+  /* .van-pull-refresh{
+    margin-bottom: 1rem;
+  } */
 </style>

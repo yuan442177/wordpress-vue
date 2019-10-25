@@ -1,16 +1,18 @@
 <template>
-  <!-- <div id="header" class="header"> -->
+  <div id="header" class="header">
     <van-nav-bar
       fixed
       title="gameloveman"
       right-text="返回顶部"
+      left-arrow
+      @click-left="handleBack"
       @click-right="backTop"
     />
     <!-- <div @click="handlePostListClick">
       <span class="header-back" v-if="showBack" @click="handleBack">{{Back}}</span>
       ganmeloveman
     </div> -->
-  <!-- </div> -->
+  </div>
 </template>
 
 <script>
@@ -33,6 +35,9 @@ export default {
     handlePostListClick (a) {
       console.log(a)
     },
+    handleBack () {
+      this.$router.go(-1)
+    },
     backTop () {
       document.documentElement.scrollTop = document.body.scrollTop = 0
     }
@@ -52,9 +57,9 @@ export default {
   }
   .van-nav-bar{
     background: #2D241F;
-    padding-top: 0.5rem;
+    padding-top: 0.3rem;
   }
-  .van-nav-bar__title, .van-nav-bar__text{
+  .van-nav-bar__title, .van-nav-bar__text, .van-icon{
     color: #ffffff
   }
     .header-back{

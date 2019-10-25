@@ -6,10 +6,13 @@ import router from './router'
 import store from './store'
 import './assets/styles/reset.css'// 样式格式化
 import './assets/styles/border.css'// 解决1px边框问题
-import { Button, NavBar, PullRefresh, Toast, List, Cell, DatetimePicker, Popup } from 'vant'
+import { Button, NavBar, PullRefresh, Toast,
+  List, Cell, DatetimePicker, Popup, Loading,
+  Tabbar, TabbarItem, Skeleton } from 'vant'
 
 Vue.use(Button).use(NavBar).use(PullRefresh).use(Toast).use(List)
-  .use(Cell).use(DatetimePicker).use(Popup)
+  .use(Cell).use(DatetimePicker).use(Popup).use(Loading).use(Tabbar)
+  .use(TabbarItem).use(Skeleton)
 
 Vue.config.productionTip = false
 
