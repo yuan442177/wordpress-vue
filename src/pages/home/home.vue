@@ -2,7 +2,7 @@
   <div>
     <home-header></home-header>
     <home-content
-      @refresh="handleRefresh"
+      @onRefresh="handleRefresh"
       @pagenext="handlePageNext"
       :loading="loading"
     ></home-content>
@@ -28,18 +28,18 @@ export default {
   methods: {
     getPostInfo (page) {
       console.log(page)
-      // axios.get('static/post' + page + '.json')
-      axios.get('https://www.gameloveman.com/wp-json/wp/v2/posts?page=' + page + '')
+      axios.get('static/post' + page + '.json')
+      // axios.get('https://www.gameloveman.com/wp-json/wp/v2/posts?page=' + page + '')
         .then(this.getPostInfoSucc)
     },
     getPostInfoSucc (res) {
       res = res.data
-      console.log(this.$store.state.postList)
       for (let i in res) {
-        console.log(res[i])
         this.postList.push(res[i])
       }
       this.$store.commit('changePostList', this.postList)
+      this.$store.commit('changeisLoading', false)
+      console.log('修改store')
       this.loading = false
     },
     // 下一页翻页
@@ -48,10 +48,10 @@ export default {
       this.getPostInfo(page)
     },
     // 下拉刷新 将postList取值为空
-    handleRefresh (page) {
+    handleRefresh () {
       this.postList = []
-      this.loading = true
-      this.getPostInfo(page)
+      this.$store.commit('commitRefresh', 1)
+      this.getPostInfo(1)
     }
   },
   mounted () {

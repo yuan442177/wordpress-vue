@@ -8,38 +8,38 @@ export default {
   // }
   changePostList (state, postList) {
     console.log(postList)
-    state.postList = postList
+    state.postList = JSON.stringify(postList)
     try {
       localStorage.postList = state.postList
     } catch (error) {
     }
   },
   changePostDetails (state, PostDetails) {
-    state.PostContent = PostDetails.content.rendered
+    // console.log(PostDetails)
+    state.PostContent = PostDetails.content.rendered.replace(/(<\/?a.*?>)/g, '')
     state.PostTitle = PostDetails.title.rendered
-    // console.log(state.PostDetails)
+    state.PostID = PostDetails.id
+    // console.log(state.PostContent)
     try {
       localStorage.PostContent = state.PostContent
       localStorage.PostTitle = state.PostTitle
+      localStorage.PostID = state.PostID
     } catch (error) {
     }
   },
   handlePageNext (state, PageSize) {
     state.PageSize = parseInt(state.PageSize) + parseInt(PageSize)
+    console.log(state.PageSize)
     try {
       localStorage.PageSize = state.PageSize
     } catch (error) {
     }
   },
-  handleRefresh (state, a) {
-    if (a === 1) {
-      state.PageSize = a
-      state.postList = []
-      console.log(state.postList)
-      try {
-        localStorage.PageSize = state.PageSize
-      } catch (error) {
-      }
+  commitRefresh (state, PageSize) {
+    state.PageSize = PageSize
+    try {
+      localStorage.PageSize = state.PageSize
+    } catch (error) {
     }
   }
 }

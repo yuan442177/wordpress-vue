@@ -1,10 +1,10 @@
 <template>
   <div>
     <home-header :showBack="showBack"></home-header>
-    <div class="wrapper" ref="wrapper">
+    <div class="wrapper" ref="wrapper" :key="this.$store.state.PostID">
       <div>
         <header>
-          <h1 v-text="this.$store.state.PostTitle" class="border-topbottom"></h1>
+          <h1 id="title" v-text="this.$store.state.PostTitle" class="border-topbottom"></h1>
         </header>
         <article v-html="this.$store.state.PostContent"></article>
       </div>
@@ -13,30 +13,38 @@
 </template>
 
 <script>
-import Bscroll from 'better-scroll'
+// import Bscroll from 'better-scroll'
 import HomeHeader from './../home/components/Header'
 export default {
   name: 'PostDetails',
   data () {
     return {
       headerTitle: this.$store.state.PostTitle,
-      showBack: true
+      showBack: true,
+      postid: this.$route.query.postid
     }
   },
   components: {
     HomeHeader
   },
+  methods: {
+    backTop () {
+      document.documentElement.scrollTop = document.body.scrollTop = 0
+    }
+  },
   mounted () {
-    this.scroll = new Bscroll(this.$refs.wrapper, {
-      click: true
-    })
+    // this.scroll = new Bscroll(this.$refs.wrapper, {
+    //   click: true
+    // })
+    console.log('123')
+    document.documentElement.scrollTop = document.body.scrollTop = 0
   }
 }
 </script>
 
 <style scoped>
   .wrapper{
-    overflow: hidden;
+    /* overflow: hidden; */
     position: absolute;
     top: 0.86rem;
     left: 0;
